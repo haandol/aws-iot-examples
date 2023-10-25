@@ -1,0 +1,6 @@
+[app]
+ns="IoTCustomAuthorizer"
+stage="Dev"
+
+[aws]
+region="ap-northeast-2"

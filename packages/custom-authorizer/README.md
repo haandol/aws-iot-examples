@@ -1,8 +1,6 @@
-# AWS IoT Provisioing by Claim
+# IoT Core Custom Authorizer
 
-Image from [AWS Whitepaper](https://docs.aws.amazon.com/whitepapers/latest/device-manufacturing-provisioning/provisioning-identity-in-aws-iot-core-for-device-connections.html)
-
-<img src="https://docs.aws.amazon.com/images/whitepapers/latest/device-manufacturing-provisioning/images/FleetProvisioningByClaim.png"/>
+[Understanding the custom authentication workflow](https://docs.aws.amazon.com/iot/latest/developerguide/custom-authorizer.html)
 
 # Prerequisites
 
@@ -51,7 +49,7 @@ $ npm i -g ts-node
 ```
 
 ```bash
-$ cd app
+$ cd src
 $ npm i
 ```
 
@@ -60,7 +58,7 @@ $ npm i
 ```bash
 $ export THING_NAME=thing01
 $ export DATA_ENDPOINT=$(aws iot describe-endpoint --endpoint-type iot:Data-ATS --query endpointAddress --output text)
-$ ts-node main.ts -e $DATA_ENDPOINT -n $THING_NAME -a ../certs/AmazonRootCA1.pem -c clientID1 -t demo
+$ ts-node main.ts -e $DATA_ENDPOINT -n $THING_NAME -c IoTCustomAuthorizerDevCustomAuthorizer -u haandol -p test
 ```
 
 # References
