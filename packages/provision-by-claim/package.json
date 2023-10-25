@@ -1,0 +1,10 @@
+{
+  "name": "provision-by-claim",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Image from [AWS Whitepaper](https://docs.aws.amazon.com/whitepapers/latest/device-manufacturing-provisioning/provisioning-identity-in-aws-iot-core-for-device-connections.html)",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "license": "MIT"
+}
