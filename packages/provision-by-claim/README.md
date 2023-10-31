@@ -7,7 +7,7 @@ Image from [AWS Whitepaper](https://docs.aws.amazon.com/whitepapers/latest/devic
 # Prerequisites
 
 - awscli
-- node.js 16+
+- node.js 18+
 - AWS Account and locally configured AWS credential
 
 # Installation

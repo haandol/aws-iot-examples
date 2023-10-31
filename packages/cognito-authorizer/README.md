@@ -1,6 +1,4 @@
-# IoT Core Custom Authorizer
-
-[Understanding the custom authentication workflow](https://docs.aws.amazon.com/iot/latest/developerguide/custom-authorizer.html)
+# IoT Core Cognito Authorizer
 
 # Prerequisites
 
@@ -12,6 +10,7 @@
 
 1. Deploy Infra
 2. Connect device
+   c
 
 ## Deploy infrastructure
 
@@ -54,14 +53,3 @@ $ npm i
 ```
 
 2. run main.ts
-
-```bash
-$ export THING_NAME=thing01
-$ export DATA_ENDPOINT=$(aws iot describe-endpoint --endpoint-type iot:Data-ATS --query endpointAddress --output text)
-$ ts-node main.ts -e $DATA_ENDPOINT -n $THING_NAME -c IoTCustomAuthorizerDevCustomAuthorizer -u haandol -p test
-```
-
-# References
-
-- https://aws.amazon.com/ko/blogs/iot/how-to-automate-onboarding-of-iot-devices-to-aws-iot-core-at-scale-with-fleet-provisioning/
-- https://github.com/aws-samples/aws-iot-fleet-provisioning
