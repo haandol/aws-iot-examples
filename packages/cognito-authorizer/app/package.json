@@ -17,7 +17,9 @@
   },
   "dependencies": {
     "@aws-amplify/ui-vue": "^3.1.29",
+    "@nuxtjs/dotenv": "^1.4.1",
     "aws-amplify": "^5.3.11",
+    "dotenv": "^16.3.1",
     "isomorphic-ws": "^5.0.0",
     "vite-plugin-ejs": "^1.6.4"
   }

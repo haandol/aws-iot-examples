@@ -15,25 +15,31 @@ import { Amplify, Auth, PubSub } from 'aws-amplify';
 import { Authenticator } from "@aws-amplify/ui-vue"
 import { AWSIoTProvider } from '@aws-amplify/pubsub';
 import "@aws-amplify/ui-vue/styles.css";
-import aws_exports from './src/aws-exports';
 Amplify.Logger.LOG_LEVEL = 'VERBOSE';
-Amplify.configure(aws_exports);
+
+const runtimeConfig = useRuntimeConfig()
+Amplify.configure({
+  aws_project_region: runtimeConfig.app.awsProjectRegion,
+  aws_cognito_identity_pool_id: runtimeConfig.app.awsCognitoIdentityPoolId,
+  aws_cognito_region: runtimeConfig.app.awsCognitoRegion,
+  aws_user_pools_id: runtimeConfig.app.awsUserPoolsId,
+  aws_user_pools_web_client_id: runtimeConfig.app.awsUserPoolsWebClientId,
+});
 
 onMounted(async () => {
   const user = await Auth.currentUserCredentials()
-  console.log('!!!!!', JSON.stringify(user.identityId))
+  console.log(`identityID: ${JSON.stringify(user.identityId)}`)
 
   PubSub.removePluggable('AWSIoTProvider');
   Amplify.addPluggable(
     new AWSIoTProvider({
-      aws_pubsub_region: 'ap-northeast-2',
-      aws_pubsub_endpoint:
-        'wss://aqg80fobwyg1q-ats.iot.ap-northeast-2.amazonaws.com/mqtt',
+      aws_pubsub_region: runtimeConfig.public.awsRegion,
+      aws_pubsub_endpoint: runtimeConfig.public.awsPubsubEndpoint,
       clientId: user.identityId,
     })
   );
 
-  PubSub.subscribe('myTopic').subscribe({
+  PubSub.subscribe(runtimeConfig.app.topic).subscribe({
     next: data => console.log('Message received', data),
     error: error => console.error(error),
     complete: () => console.log('Done'),
@@ -41,7 +47,7 @@ onMounted(async () => {
 })
 
 const onPublish = async () => {
-  await PubSub.publish('myTopic', { 'msg': 'I am.' });
+  await PubSub.publish(runtimeConfig.app.topic, { 'msg': 'I am.' });
   console.log('published message')
 }
 </script>
