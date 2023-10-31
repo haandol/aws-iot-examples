@@ -4,7 +4,7 @@ import * as iam from 'aws-cdk-lib/aws-iam';
 import * as cognito from 'aws-cdk-lib/aws-cognito';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as lambdaNodejs from 'aws-cdk-lib/aws-lambda-nodejs';
-import { aws_wafv2 as wafv2 } from 'aws-cdk-lib';
+import { CfnOutput, aws_wafv2 as wafv2 } from 'aws-cdk-lib';
 
 interface IProps {
   redirectUri: string;
@@ -33,7 +33,17 @@ export class CognitoUserPool extends Construct {
       userPool,
       props.redirectUri
     );
-    this.newIdentityPool(ns, userPool, userPoolClient);
+    const identityPool = this.newIdentityPool(ns, userPool, userPoolClient);
+
+    new CfnOutput(this, 'UserPoolIdOutput', {
+      value: userPool.userPoolId,
+    });
+    new CfnOutput(this, 'UserPoolWebClientIdOutput', {
+      value: userPoolClient.userPoolClientId,
+    });
+    new CfnOutput(this, 'IdentityPoolIdOutput', {
+      value: identityPool.logicalId,
+    });
 
     this.userPool = userPool;
     this.userPoolClient = userPoolClient;

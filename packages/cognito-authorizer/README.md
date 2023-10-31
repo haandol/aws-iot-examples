@@ -1,5 +1,7 @@
 # IoT Core Cognito Authorizer
 
+<img src="https://miro.medium.com/v2/resize:fit:1400/1*5Lwi-RU4Sq1DYvKn91dukg.png" />
+
 # Prerequisites
 
 - awscli
@@ -10,7 +12,6 @@
 
 1. Deploy Infra
 2. Connect device
-   c
 
 ## Deploy infrastructure
 
@@ -39,17 +40,48 @@ $ cdk bootstrap
 $ cdk deploy "*" --require-apporval never
 ```
 
-## Connect device
+## Connect to MQTT over Websocket
 
 1. install dependencies
 
 ```bash
-$ npm i -g ts-node
+$ cd app
+$ yarn install
 ```
+
+2. open [env/dev.env](env/dev.env) and fill the values. you can find the values from output of `cdk deploy` result except `aws_pubsub_endpoint`.
+
+you can get `aws_pubsub_endpoint` with following command.
 
 ```bash
-$ cd src
-$ npm i
+$ aws iot describe-endpoint --endpoint-type iot:Data-ATS --query endpointAddress --output text
 ```
 
-2. run main.ts
+and then, copy `dev.env` file under env folder with name `.env`
+
+```bash
+$ cp env/dev.env .env
+```
+
+2. run build and web server
+
+```bash
+$ yarn build
+$ node .output/server/index.mjs
+```
+
+3. visit web page
+
+```bash
+$ open localhost:3000
+```
+
+4. sign up by email and signin with it. then you can find out the identity id on the page.
+
+5. attach iot policy to user federated identity id.
+
+```bash
+$ aws iot attach-principal-policy --policy-name IoTCogAuthorizerDevIoTDataPolicy --principal YOUR_IDENTITY_ID
+```
+
+6. refresh the page and press publish button.

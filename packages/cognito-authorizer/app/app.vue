@@ -2,9 +2,20 @@
   <div>
     <Authenticator>
       <template v-slot="{ user, signOut }">
-        <h1>Hello {{ user.username }}!</h1>
-        <button @click="signOut">Sign Out</button>
-        <button @click="onPublish">Publish</button>
+        <h1>Hello!</h1>
+        <h2>Username: {{ user.username }}</h2>
+        <h2>IdentityID: {{ identityId }}</h2>
+        <div>
+          <label>Publish to {{ topic }}: </label>
+          <button @click="onPublish">Publish</button>
+        </div>
+        <div>
+          <p>Last message:</p>
+          <div> {{ lastMessage }} </div>
+        </div>
+        <div>
+          <button @click="signOut">Sign Out</button>
+        </div>
       </template>
     </Authenticator>
   </div>
@@ -26,9 +37,15 @@ Amplify.configure({
   aws_user_pools_web_client_id: runtimeConfig.app.awsUserPoolsWebClientId,
 });
 
+const topic = ref<string>('');
+const lastMessage = ref<string>('');
+const identityId = ref<string>('');
+
 onMounted(async () => {
   const user = await Auth.currentUserCredentials()
   console.log(`identityID: ${JSON.stringify(user.identityId)}`)
+  identityId.value = user.identityId;
+  topic.value = runtimeConfig.app.topic || 'myTopic';
 
   PubSub.removePluggable('AWSIoTProvider');
   Amplify.addPluggable(
@@ -40,14 +57,17 @@ onMounted(async () => {
   );
 
   PubSub.subscribe(runtimeConfig.app.topic).subscribe({
-    next: data => console.log('Message received', data),
+    next: data => {
+      console.log('Message received', data);
+      lastMessage.value = JSON.stringify(data);
+    },
     error: error => console.error(error),
     complete: () => console.log('Done'),
   });
 })
 
 const onPublish = async () => {
-  await PubSub.publish(runtimeConfig.app.topic, { 'msg': 'I am.' });
+  await PubSub.publish(runtimeConfig.app.topic, { 'msg': 'I am 신뢰에요.' });
   console.log('published message')
 }
 </script>
